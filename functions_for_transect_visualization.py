@@ -298,7 +298,7 @@ def plot_eddy_field_transect_zoom(date,station_lats,station_lons,transect_lats,t
         if (station_lons[k] < transect_lons[1]-3) or (station_lons[k] > transect_lons[0]+3) or (station_lats[k] > transect_lats[0]+3) or (station_lats[k] < transect_lats[1]-3):
             continue
         ax.scatter(station_lon,station_lat,c='k', marker=(5, 2),s=100)        
-        ax.text(station_lons[k]+0.75,station_lats[k]-0.2,station_labels[k],fontsize=18,color='k')
+        ax.text(station_lons[k]+0.5,station_lats[k]-0.1,station_labels[k],fontsize=18,color='k')
 
     #### PLOT TRANSECT ####
     ax.plot(transect_lons,transect_lats,c='k')
@@ -347,14 +347,14 @@ def get_locations_along_traj(date,start_hour,duration,station_lats,station_lons,
                 transect_lats.append(start_lat)
                 transect_lons.append(start_lon)
                 
-                print('Start during transit between station %s and %s at (%s,%s)'%(int(d/2),int((d/2)+1),round(start_lat,2),round(start_lon,2)))
+                print('Start during transit between station %s and %s at (%s,%s)'%(int(d/2),int((d/2)+1),round(start_lat,3),round(start_lon,3)))
                 
                 if stop_datetime < ship_stop_starts[d+1]: #still in transit 
                     hrs_since_last_station = (stop_datetime - past_station_time).total_seconds()/(60*60)
                     stop_lat = past_station_lat - ((past_station_lat - next_station_lat)/hrs_between_stations)*hrs_since_last_station
                     stop_lon = past_station_lon - ((past_station_lon - next_station_lon)/hrs_between_stations)*hrs_since_last_station
                 
-                    print('Stop during transit between station %s and %s at (%s,%s)'%(int(d/2),int((d/2)+1),round(stop_lat,2),round(stop_lon,2)))
+                    print('Stop during transit between station %s and %s at (%s,%s)'%(int(d/2),int((d/2)+1),round(stop_lat,3),round(stop_lon,3)))
             
                 elif stop_datetime < ship_stop_starts[d+2]: #arrived at station
                     
@@ -367,20 +367,19 @@ def get_locations_along_traj(date,start_hour,duration,station_lats,station_lons,
                     
                 elif stop_datetime < ship_stop_starts[d+3]: #left new station
                     
-                    past_station_lat,past_station_lon,past_station_time = station_lats[int(d/2)+1],station_lons[int(d/2)+1],ship_stop_starts[d+1]
-                    next_station_lat,next_station_lon,next_station_time = station_lats[int(d/2)+2],station_lons[int(d/2)+2],ship_stop_starts[d+2]
-                
                     print('Arrive at station %s (%s,%s) at %s'%(int((d/2)+1),next_station_lat,next_station_lon,ship_stop_starts[d+1]))
                     print('Leave station %s at %s'%(int((d/2)+1),ship_stop_starts[d+2]))
+
+                    past_station_lat,past_station_lon,past_station_time = station_lats[int(d/2)+1],station_lons[int(d/2)+1],ship_stop_starts[d+2]
+                    next_station_lat,next_station_lon,next_station_time = station_lats[int(d/2)+2],station_lons[int(d/2)+2],ship_stop_starts[d+3]
                 
-                    hrs_since_last_station = (ship_stop_starts[d+2] - past_station_time).total_seconds()/(60*60)
-                    hrs_between_stations = (next_station_time - past_station_time).total_seconds()/(60*60)
-                                        
-                    hrs_since_last_station = (stop_datetime - next_station_time).total_seconds()/(60*60)
+                    hrs_between_stations = (next_station_time - past_station_time).total_seconds()/(60*60)                                        
+                    hrs_since_last_station = (stop_datetime - past_station_time).total_seconds()/(60*60)
+
                     stop_lat = past_station_lat - ((past_station_lat - next_station_lat)/hrs_between_stations)*hrs_since_last_station
                     stop_lon = past_station_lon - ((past_station_lon - next_station_lon)/hrs_between_stations)*hrs_since_last_station
                 
-                    print('Stop during transit between station %s and %s at (%s,%s)'%(int(d/2)+1,int((d/2)+2),round(stop_lat,2),round(stop_lon,2)))
+                    print('Stop during transit between station %s and %s at (%s,%s)'%(int(d/2)+1,int((d/2)+2),round(stop_lat,3),round(stop_lon,3)))
                     
                 else:
                     print('ERROR: Pick a shorter duration.')
@@ -422,7 +421,7 @@ def get_locations_along_traj(date,start_hour,duration,station_lats,station_lons,
                         stop_lat = start_lat - ((start_lat - next_station_lat)/hrs_between_stations)*remaining_time
                         stop_lon = start_lon - ((start_lon - next_station_lon)/hrs_between_stations)*remaining_time
 
-                        print('Stop during transit between station %s and %s at (%s,%s)'%(int((d+1)/2),int(((d+1)/2)+1),round(stop_lat,2),round(stop_lon,2)))
+                        print('Stop during transit between station %s and %s at (%s,%s)'%(int((d+1)/2),int(((d+1)/2)+1),round(stop_lat,3),round(stop_lon,3)))
 
                     elif stop_datetime < ship_stop_starts[d+3]: #arrived at station
 
@@ -689,7 +688,7 @@ def transect_eddy_action(date,start_lat,start_lon,stop_lat,stop_lon,anti_eddy_da
                 
     if (eddy_flag == 0): # did not pass through an eddy
         dist = distance_from_lat_lon(start_lat,start_lon,stop_lat,stop_lon)
-        print('%s km in background waters from (%s,%s) to (%s,%s)'%(round(dist,2),round(start_lat,2),round(start_lon,2),round(stop_lat,2),round(stop_lon,2)))
+        print('%s km in background waters from (%s,%s) to (%s,%s)'%(round(dist,2),round(start_lat,3),round(start_lon-360,3),round(stop_lat,3),round(stop_lon-360,3)))
             
     else:
         # Sort intersections by latitude (trajectory is only headed south) so that the events are in the correct order through time
@@ -744,7 +743,7 @@ def transect_eddy_action(date,start_lat,start_lon,stop_lat,stop_lon,anti_eddy_da
                 condition_str = 'in overlapping SSH eddy and RCLV'
 
             if k == 0:
-                print('%s km %s from (%s,%s) to (%s,%s)'%(round(dist,2),condition_str,round(lat1,2),round(lon1,2),round(lat2,2),round(lon2,2)))
+                print('%s km %s from (%s,%s) to (%s,%s)'%(round(dist,2),condition_str,round(lat1,3),round(lon1-360,3),round(lat2,3),round(lon2-360,3)))
             else:
-                print('%s km %s from (%s,%s) to (%s,%s)'%(round(dist,2),condition_str,round(lat1,2),round(lon1,2),round(lat2,2),round(lon2,2)))
+                print('%s km %s from (%s,%s) to (%s,%s)'%(round(dist,2),condition_str,round(lat1,3),round(lon1-360,3),round(lat2,3),round(lon2-360,3)))
 
