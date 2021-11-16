@@ -307,7 +307,7 @@ def find_RCLVs(min_dist,min_area,def_tol,target_cd,lat_start,lat_stop,lon_start,
 
 ############################## EXECUTE ##############################
 
-#download_CMEMS_data()
+download_CMEMS_data()
 run_parcels(10,33,-150,-117,0.03125,20,6,8,'days','y')
 calc_LAVD(10,33,-150,-117,0.03125,20,6,8,'days','y')
 find_RCLVs(40,24,0.005,0.01,10,33,-150,-117,0.03125,20,6,8,'days','y')
