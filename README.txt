@@ -2,7 +2,7 @@
 
 # Lexi Jones
 # Date Created: 10/13/21
-# Last Updated: 11/15/21
+# Last Updated: 11/16/21
 
 ###### SET UP CONDA ENV ######
 1) If you do not have Anaconda installed, do that from https://www.anaconda.com/products/individual
@@ -38,6 +38,12 @@
 5) Navigate into floater directory and run the command
 	python setup.py install
 
+6) Test code by running: 
+	python daily_eddy_id_v2.py
+	
+	NOTE: You will need to download at least 8 days of satellite data before running the full script. Comment out all functions at the
+	bottom of the script other than 'download_CMEMS_data()'.
+	
 
 ###### MATLAB / OceanEddies SETUP #####
 
@@ -63,3 +69,5 @@ is downloaded in the 'CMEMS_data' directory.
 	
 6) Run MATLAB script from command line (or open MATLAB & run it from the interface)
 	matlab -r "G4_CMEMS_SSH_eddies; exit;"
+
+	NOTE: You will either need to download 30 days of satellite data OR change that parameter that is hardcoded in the MATLAB script.
